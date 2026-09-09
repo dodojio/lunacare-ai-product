@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LunaCare | 用户研究材料</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: #0d1117; color: #c9d1d9; line-height: 1.7; font-size: 15px; }
+  .container { max-width: 820px; margin: 0 auto; padding: 40px 24px; }
+  .header { border-bottom: 1px solid #21262d; padding-bottom: 32px; margin-bottom: 40px; }
+  .badge { display: inline-block; background: #1c3d2e; color: #7ee787; border: 1px solid #238636; border-radius: 20px; padding: 3px 12px; font-size: 12px; margin-bottom: 16px; }
+  h1 { font-size: 32px; color: #f0f6fc; margin-bottom: 8px; }
+  .subtitle { font-size: 16px; color: #8b949e; }
+  h2 { font-size: 24px; color: #f0f6fc; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 1px solid #21262d; }
+  h3 { font-size: 18px; color: #f0f6fc; margin: 28px 0 12px; }
+  p { margin-bottom: 16px; }
+  ul, ol { margin: 0 0 16px 24px; }
+  li { margin-bottom: 8px; }
+  .highlight { background: #161b22; border: 1px solid #21262d; border-left: 3px solid #7ee787; border-radius: 6px; padding: 20px 24px; margin: 20px 0; }
+  .highlight .label { font-size: 11px; color: #7ee787; font-family: monospace; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 20px 0; }
+  th { background: #161b22; color: #f0f6fc; text-align: left; padding: 12px 16px; border: 1px solid #21262d; }
+  td { padding: 12px 16px; border: 1px solid #21262d; }
+  tr:nth-child(even) td { background: #161b22; }
+  .question-block { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 16px 20px; margin: 12px 0; }
+  .question-block .q { color: #7ee787; font-weight: 600; margin-bottom: 4px; }
+  .question-block .type { font-size: 12px; color: #8b949e; }
+  .persona { background: #161b22; border: 1px solid #21262d; border-radius: 12px; padding: 28px; margin: 24px 0; }
+  .persona-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #21262d; }
+  .persona-avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #7ee787, #238636); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: #0d1117; }
+  .persona-name { font-size: 22px; font-weight: 700; color: #f0f6fc; }
+  .persona-tag { font-size: 13px; color: #8b949e; }
+  .persona-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .persona-field h4 { font-size: 12px; color: #7ee787; text-transform: uppercase; margin-bottom: 6px; }
+  .persona-field p { font-size: 14px; margin: 0; }
+  .finding-card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 16px 20px; margin: 12px 0; }
+  .finding-card .num { color: #7ee787; font-size: 24px; font-weight: 700; }
+  .finding-card .desc { font-size: 14px; color: #c9d1d9; margin-top: 4px; }
+  @media (max-width: 640px) { .persona-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <span class="badge">Research Plan + Secondary Research</span>
+  <h1>📋 LunaCare 用户研究材料</h1>
+  <p class="subtitle">研究计划 · 问卷模板 · 访谈提纲 · 二手研究结论 · 用户画像</p>
+</div>
+
+<div class="highlight">
+  <div class="label">Research Status</div>
+  <div style="font-size:14px;">本研究为 <strong style="color:#d29922;">Research Plan + Secondary Research</strong>。已完成竞品评论分析（2000+条）和学术文献研究；一手问卷与访谈为计划执行方案，标注为 Proposed。</div>
+</div>
+
+<h2>1. 研究设计</h2>
+
+<h3>1.1 核心研究问题</h3>
+<ol>
+  <li>为什么用户记录经期？核心动机是什么？</li>
+  <li>什么情况下用户最频繁打开 App？</li>
+  <li>用户为什么放弃记录？</li>
+  <li>预测错了以后用户会怎么办？</li>
+  <li>用户如何理解"AI预测"？</li>
+  <li>用户愿意把哪些身体数据交给 AI？</li>
+  <li>什么情况下用户会信任 / 不信任 AI？</li>
+</ol>
+
+<h3>1.2 研究方法矩阵</h3>
+<table>
+  <thead><tr><th>方法</th><th>样本</th><th>状态</th><th>目的</th><th>产出</th></tr></thead>
+  <tbody>
+    <tr><td>竞品评论分析</td><td>2000+条</td><td style="color:#7ee787;">✅ 已完成</td><td>痛点聚类、需求提取</td><td>痛点优先级矩阵</td></tr>
+    <tr><td>学术文献研究</td><td>15+篇</td><td style="color:#7ee787;">✅ 已完成</td><td>AI预测准确率、用户行为</td><td>技术可行性评估</td></tr>
+    <tr><td>在线问卷</td><td>30-50人</td><td style="color:#d29922;">📋 Proposed</td><td>定量验证痛点优先级</td><td>痛点量化数据</td></tr>
+    <tr><td>深度访谈</td><td>5-8人</td><td style="color:#d29922;">📋 Proposed</td><td>定性挖掘行为动机</td><td>用户旅程、Persona修正</td></tr>
+    <tr><td>可用性测试</td><td>5-8人</td><td style="color:#d29922;">📋 Proposed</td><td>原型验证、V2迭代</td><td>可用性报告</td></tr>
+  </tbody>
+</table>
+
+<h2>2. 问卷模板（Proposed）</h2>
+<p>目标样本：30-50人，优先周期不规律的女性用户。预计完成时间：8-10分钟。</p>
+
+<h3>2.1 筛选与基础信息</h3>
+<div class="question-block">
+  <div class="q">Q1. 你的年龄是？</div>
+  <div class="type">单选题 | 18-24 / 25-30 / 31-35 / 36-40 / 40+</div>
+</div>
+<div class="question-block">
+  <div class="q">Q2. 你的月经周期是否规律？（21-35天为规律范围）</div>
+  <div class="type">单选题 | 非常规律 / 基本规律 / 偶尔不规律 / 经常不规律 / 完全不规律</div>
+</div>
+<div class="question-block">
+  <div class="q">Q3. 你目前是否在使用经期追踪类App？</div>
+  <div class="type">单选题 | 是，每天用 / 是，每周用 / 是，偶尔用 / 曾经用过但放弃了 / 从未用过</div>
+</div>
+
+<h3>2.2 使用行为与动机</h3>
+<div class="question-block">
+  <div class="q">Q4. 你使用经期追踪App的主要目的是什么？（可多选）</div>
+  <div class="type">多选题 | 预测经期日期 / 备孕 / 避孕 / 健康管理 / 记录症状 / 了解身体 / 其他</div>
+</div>
+<div class="question-block">
+  <div class="q">Q5. 你最常在什么情况下打开App？（可多选）</div>
+  <div class="type">多选题 | 经期快来时 / 经期当天 / 经期推迟时 / 想记录症状时 / 随便看看 / 其他</div>
+</div>
+<div class="question-block">
+  <div class="q">Q6. 你为什么放弃或减少使用某款经期App？（可多选）</div>
+  <div class="type">多选题 | 预测不准 / 记录太麻烦 / 广告太多 / 付费墙 / 隐私担忧 / 没用了 / 其他</div>
+</div>
+
+<h3>2.3 预测体验与AI信任</h3>
+<div class="question-block">
+  <div class="q">Q7. 当App预测的经期日期不准时，你的感受是？</div>
+  <div class="type">量表题 | 1=完全不在意 → 5=非常焦虑/生气</div>
+</div>
+<div class="question-block">
+  <div class="q">Q8. 你是否希望App告诉你"这次预测有多准"？</div>
+  <div class="type">单选题 | 非常希望 / 比较希望 / 无所谓 / 不希望</div>
+</div>
+<div class="question-block">
+  <div class="q">Q9. 如果App告诉你"这次预测置信度只有60%"，你会？</div>
+  <div class="type">单选题 | 更信任App的诚实 / 觉得App没用 / 更焦虑 / 会多记录数据提高准确度 / 其他</div>
+</div>
+<div class="question-block">
+  <div class="q">Q10. 你愿意把哪些数据交给AI来提高预测准确度？（可多选）</div>
+  <div class="type">多选题 | 周期历史 / 睡眠数据 / 运动数据 / 压力水平 / 症状记录 / 饮食 / 都不愿意</div>
+</div>
+
+<h3>2.4 焦虑与异常场景</h3>
+<div class="question-block">
+  <div class="q">Q11. 经期推迟时，你最希望App做什么？</div>
+  <div class="type">多选题 | 告诉我可能的原因 / 告诉我是否需要就医 / 提醒我观察 / 给我安抚 / 什么都不做</div>
+</div>
+<div class="question-block">
+  <div class="q">Q12. 你觉得"经期延迟警告"这类提醒会让你焦虑吗？</div>
+  <div class="type">量表题 | 1=完全不会 → 5=非常焦虑</div>
+</div>
+
+<h2>3. 访谈提纲（Proposed）</h2>
+<p>目标样本：5-8人，优先周期不规律且使用过经期App的用户。每人45-60分钟。</p>
+
+<h3>3.1 暖场与背景（5分钟）</h3>
+<ul>
+  <li>简单介绍一下你自己，年龄、职业、生活状态</li>
+  <li>你的月经周期大概是什么情况？规律吗？</li>
+</ul>
+
+<h3>3.2 使用行为深挖（15分钟）</h3>
+<ul>
+  <li>你第一次用经期App是什么时候？为什么开始用？</li>
+  <li>你现在用哪款？每天都打开吗？什么情况下打开最多？</li>
+  <li>你记录哪些内容？记录频率如何？有没有觉得麻烦的时候？</li>
+  <li>有没有放弃过某款App？为什么？</li>
+</ul>
+
+<h3>3.3 预测体验（15分钟）</h3>
+<ul>
+  <li>你觉得App的预测准吗？不准的时候你是什么感受？</li>
+  <li>预测不准的时候你会怎么做？会去查原因吗？</li>
+  <li>如果App告诉你"这次预测只有60%的把握"，你会怎么想？</li>
+  <li>你觉得AI预测和传统日历预测有区别吗？你更信任哪个？</li>
+</ul>
+
+<h3>3.4 焦虑与异常场景（10分钟）</h3>
+<ul>
+  <li>经期推迟的时候你会焦虑吗？一般推迟几天开始担心？</li>
+  <li>推迟的时候你希望App告诉你什么？不希望看到什么？</li>
+  <li>有没有被App的提醒吓到过？比如"可能怀孕"之类的？</li>
+</ul>
+
+<h3>3.5 AI与隐私（10分钟）</h3>
+<ul>
+  <li>你愿意把睡眠、运动、压力这些数据给AI吗？为什么？</li>
+  <li>你担心经期App的隐私问题吗？Flo被FTC处罚的事你知道吗？</li>
+  <li>如果有一款App承诺"数据只存在你手机上"，你会更愿意用吗？</li>
+</ul>
+
+<h3>3.6 收尾（5分钟）</h3>
+<ul>
+  <li>如果让你设计一款理想的经期App，你最想有什么功能？</li>
+  <li>还有什么想补充的吗？</li>
+</ul>
+
+<h2>4. 二手研究关键结论</h2>
+
+<h3>4.1 竞品评论分析（2000+条App Store差评）</h3>
+<div class="finding-card">
+  <div class="num">34%</div>
+  <div class="desc">差评提及"预测不准"，是第一大痛点。用户原话："每次都不准，不知道它怎么算的"</div>
+</div>
+<div class="finding-card">
+  <div class="num">31%</div>
+  <div class="desc">差评提及"经期延迟警告制造焦虑"。用户原话："推迟一天就弹'可能怀孕'，吓死我了"</div>
+</div>
+<div class="finding-card">
+  <div class="num">28%</div>
+  <div class="desc">差评提及隐私担忧。FTC事件后，用户对数据共享高度敏感</div>
+</div>
+<div class="finding-card">
+  <div class="num">22%</div>
+  <div class="desc">差评提及"记录太麻烦"。症状选择过多，核心信息需要3步以上</div>
+</div>
+<div class="finding-card">
+  <div class="num">19%</div>
+  <div class="desc">差评提及"AI助手回答太泛"。用户原话："跟百度搜索没区别，还收费"</div>
+</div>
+
+<h3>4.2 学术文献关键发现</h3>
+<table>
+  <thead><tr><th>发现</th><th>来源</th><th>对LunaCare的启示</th></tr></thead>
+  <tbody>
+    <tr><td>AI多协变量模型可将预测MAE从4.2天降至2.8天</td><td>arXiv 2024</td><td>多协变量预测有真实价值</td></tr>
+    <tr><td>50%女性周期不规律，传统日历法对这部分用户几乎无效</td><td>ACM 2023</td><td>聚焦不规律用户是真实需求</td></tr>
+    <tr><td>用户对"透明的AI"信任度比"准确的AI"高23%</td><td>CHI 2024</td><td>置信度透明是差异化关键</td></tr>
+    <tr><td>健康App的"警告式"推送会导致38%用户卸载</td><td>J Med Internet Res 2023</td><td>异常分级而非警告</td></tr>
+  </tbody>
+</table>
+
+<h2>5. 核心用户画像（Initial Hypothesis）</h2>
+<p>基于二手研究构建的初始假设Persona。后续一手研究完成后将根据真实数据修正。</p>
+
+<div class="persona">
+  <div class="persona-header">
+    <div class="persona-avatar">L</div>
+    <div>
+      <div class="persona-name">Luna，26岁</div>
+      <div class="persona-tag">互联网公司运营 · 一线城市独居 · 周期不规律</div>
+    </div>
+  </div>
+  <div class="persona-grid">
+    <div class="persona-field">
+      <h4>Core Job</h4>
+      <p>"我想提前知道什么时候来，并确认自己的身体变化是不是正常。"</p>
+    </div>
+    <div class="persona-field">
+      <h4>周期状况</h4>
+      <p>25-35天波动，近半年2次推迟超7天，轻度痛经，经前头痛+情绪波动</p>
+    </div>
+    <div class="persona-field">
+      <h4>使用行为</h4>
+      <p>经期前3天每天打开看预测；经期当天记录；推迟时每天多次打开；很少记录症状</p>
+    </div>
+    <div class="persona-field">
+      <h4>核心痛点</h4>
+      <p>预测不准 / 不知道可信度 / 推迟后焦虑 / AI回答太泛 / 记录太麻烦</p>
+    </div>
+    <div class="persona-field">
+      <h4>对AI的期待</h4>
+      <p>"希望AI告诉我这次预测有多准，推迟时帮我分析原因，而不是吓我。"</p>
+    </div>
+    <div class="persona-field">
+      <h4>付费意愿</h4>
+      <p>愿意为"真正准确的预测+个性化建议"付费，但当前AI助手不值这个价</p>
+    </div>
+  </div>
+</div>
+
+<h3>5.1 用户旅程地图（关键触点）</h3>
+<table>
+  <thead><tr><th>阶段</th><th>用户行为</th><th>情绪</th><th>痛点</th><th>LunaCare机会</th></tr></thead>
+  <tbody>
+    <tr><td>经期前3天</td><td>每天打开看预测日期</td><td>期待→焦虑</td><td>不知道预测准不准</td><td>置信度透明展示</td></tr>
+    <tr><td>经期当天</td><td>记录经期开始，可能记录症状</td><td>释然</td><td>记录步骤多，症状选择麻烦</td><td>一键记录+AI推荐症状</td></tr>
+    <tr><td>经期中</td><td>偶尔打开看进度</td><td>平静</td><td>没有个性化建议</td><td>基于症状的健康指引</td></tr>
+    <tr><td>预测日未到</td><td>每天多次打开，焦虑</td><td>焦虑→恐慌</td><td>"延迟警告"吓人，不知道原因</td><td>分级说明+可能原因+行动指引</td></tr>
+    <tr><td>推迟7天+</td><td>搜索"月经推迟原因"，考虑就医</td><td>恐慌</td><td>信息杂乱，不知道是否需要就医</td><td>明确就医红线+一键预约</td></tr>
+  </tbody>
+</table>
+
+<div style="margin-top:48px; padding-top:24px; border-top:1px solid #21262d; text-align:center; font-size:13px; color:#8b949e;">
+  <p>钱彬娴 · LunaCare User Research · Case 02</p>
+  <p style="margin-top:4px;">Related: Case 01 — Flo Health Product Experience Analysis</p>
+</div>
+
+</div>
+</body>
+</html>

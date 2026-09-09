@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LunaCare | 验证方案与数据指标</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: #0d1117; color: #c9d1d9; line-height: 1.7; font-size: 15px; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 24px; }
+  .header { border-bottom: 1px solid #21262d; padding-bottom: 32px; margin-bottom: 40px; }
+  .badge { display: inline-block; background: #1c3d2e; color: #7ee787; border: 1px solid #238636; border-radius: 20px; padding: 3px 12px; font-size: 12px; margin-bottom: 16px; }
+  h1 { font-size: 30px; color: #f0f6fc; margin-bottom: 8px; }
+  .subtitle { font-size: 15px; color: #8b949e; }
+  h2 { font-size: 22px; color: #f0f6fc; margin: 48px 0 16px; padding-bottom: 10px; border-bottom: 1px solid #21262d; }
+  h3 { font-size: 17px; color: #f0f6fc; margin: 28px 0 12px; }
+  p { margin-bottom: 14px; }
+  ul, ol { margin: 0 0 14px 24px; }
+  li { margin-bottom: 6px; }
+  .highlight { background: #161b22; border: 1px solid #21262d; border-left: 3px solid #7ee787; border-radius: 6px; padding: 18px 22px; margin: 18px 0; }
+  .highlight .label { font-size: 11px; color: #7ee787; font-family: monospace; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  th { background: #161b22; color: #f0f6fc; text-align: left; padding: 10px 14px; border: 1px solid #21262d; }
+  td { padding: 10px 14px; border: 1px solid #21262d; vertical-align: top; }
+  tr:nth-child(even) td { background: #161b22; }
+  .metric-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 16px 0; }
+  .metric-card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 16px; }
+  .metric-name { font-size: 14px; font-weight: 600; color: #f0f6fc; margin-bottom: 4px; }
+  .metric-value { font-size: 24px; font-weight: 700; color: #7ee787; margin: 4px 0; }
+  .metric-desc { font-size: 12px; color: #8b949e; }
+  .task-card { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 18px; margin-bottom: 14px; }
+  .task-card .task-num { color: #7ee787; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .task-card .task-desc { font-size: 14px; color: #c9d1d9; margin-bottom: 8px; }
+  .task-card .task-success { font-size: 12px; color: #8b949e; }
+  .task-card .task-success strong { color: #7ee787; }
+  .iteration-flow { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+  .iter-step { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 14px 20px; text-align: center; min-width: 120px; }
+  .iter-step .icon { font-size: 24px; margin-bottom: 4px; }
+  .iter-step .text { font-size: 13px; color: #f0f6fc; font-weight: 600; }
+  .iter-arrow { color: #7ee787; font-size: 20px; }
+  .ab-card { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+  .ab-card h4 { font-size: 14px; color: #f0f6fc; margin-bottom: 6px; }
+  .ab-card p { font-size: 12px; color: #8b949e; margin-bottom: 4px; }
+  .ab-card .hypothesis { color: #7ee787; font-size: 12px; }
+  @media (max-width: 640px) { .metric-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <span class="badge">Validation Plan · Proposed Metrics</span>
+  <h1>🧪 LunaCare 验证方案与数据指标</h1>
+  <p class="subtitle">可用性测试计划 · 数据指标体系 · A/B测试计划 · V1→V2迭代</p>
+</div>
+
+<div class="highlight">
+  <div class="label">Note</div>
+  <div style="font-size:14px;">以下为 <strong style="color:#d29922;">Proposed</strong> 验证方案和指标体系。概念产品阶段用于定义成功标准和验证方向，非实际运行数据。建议完成至少一轮5-8人可用性测试，将LunaCare从"课堂作业感"变成真正的产品作品。</div>
+</div>
+
+<h2>1. 可用性测试计划</h2>
+
+<h3>1.1 测试概述</h3>
+<table>
+  <thead><tr><th>项目</th><th>内容</th></tr></thead>
+  <tbody>
+    <tr><td><strong>测试目标</strong></td><td>验证LunaCare核心设计假设：置信度透明是否能降低用户焦虑、提高信任度</td></tr>
+    <tr><td><strong>参与者</strong></td><td>5-8人，优先周期不规律且使用过经期App的女性用户</td></tr>
+    <tr><td><strong>招募标准</strong></td><td>18-35岁女性；周期不规律（标准差>3天）；使用过至少1款经期追踪App</td></tr>
+    <tr><td><strong>测试方法</strong></td><td>远程屏幕共享 + 出声思考（Think Aloud）+ 半结构化访谈</td></tr>
+    <tr><td><strong>单场时长</strong></td><td>45-60分钟（5分钟暖场 + 25分钟任务 + 20分钟访谈）</td></tr>
+    <tr><td><strong>测试原型</strong></td><td>Figma高保真可交互原型（10个核心界面）</td></tr>
+  </tbody>
+</table>
+
+<h3>1.2 三个核心任务</h3>
+
+<div class="task-card">
+  <div class="task-num">任务 1 — 查看预测并理解可信度</div>
+  <div class="task-desc">"请查看你下次经期的预测时间，并告诉我你认为这个预测有多可信。"</div>
+  <div class="task-success"><strong>成功标准：</strong>用户能找到预测日期（≤10秒）；能说出置信度等级和含义；理解"中等置信度"意味着什么</div>
+</div>
+
+<div class="task-card">
+  <div class="task-num">任务 2 — 记录今天经期开始</div>
+  <div class="task-desc">"假设你今天经期开始了，请在App中完成记录。"</div>
+  <div class="task-success"><strong>成功标准：</strong>用户能在3步内完成记录；注意到AI推荐的症状标签；理解"记录后预测会更新"</div>
+</div>
+
+<div class="task-card">
+  <div class="task-num">任务 3 — 经期推迟5天，判断是否需要担心</div>
+  <div class="task-desc">"假设你的经期比预测晚了5天还没来，请在App中了解情况，并告诉我你接下来会怎么做。"</div>
+  <div class="task-success"><strong>成功标准：</strong>用户能找到推迟说明；理解"需关注"分级；能说出至少1个可能原因；知道什么时候该就医；不感到被"警告"吓到</div>
+</div>
+
+<h3>1.3 记录指标</h3>
+<table>
+  <thead><tr><th>指标</th><th>定义</th><th>目标</th></tr></thead>
+  <tbody>
+    <tr><td>任务完成率</td><td>3个任务中独立完成的比例</td><td>≥80%</td></tr>
+    <tr><td>任务完成时间</td><td>每个任务从开始到完成的时间</td><td>任务1≤30秒，任务2≤60秒，任务3≤90秒</td></tr>
+    <tr><td>用户理解度</td><td>测试后问卷中对置信度概念的理解评分（1-5）</td><td>≥4.0</td></tr>
+    <tr><td>焦虑感评分</td><td>推迟场景后用户自我报告的焦虑程度（1-5）</td><td>≤2.5（低于传统"警告"模式）</td></tr>
+    <tr><td>错误点</td><td>用户操作中出现的困惑、误点击、找不到入口</td><td>每任务≤1个</td></tr>
+    <tr><td>用户原话</td><td>记录用户的关键反馈和金句</td><td>每用户≥3条有价值反馈</td></tr>
+    <tr><td>SUS评分</td><td>系统可用性量表（System Usability Scale）</td><td>≥70分（良好）</td></tr>
+  </tbody>
+</table>
+
+<h3>1.4 测试后访谈问题</h3>
+<ol>
+  <li>你觉得"预测置信度"这个功能有用吗？为什么？</li>
+  <li>看到"中等置信度"时，你的感受是什么？会影响你对App的信任吗？</li>
+  <li>推迟场景的说明和你之前用过的App有什么不同？你更喜欢哪种？</li>
+  <li>你觉得AI推荐症状标签准确吗？会使用吗？</li>
+  <li>如果这个App真的上线，你愿意用吗？愿意付费吗？</li>
+  <li>你觉得最需要改进的地方是什么？</li>
+</ol>
+
+<h2>2. 数据指标体系</h2>
+
+<div class="highlight">
+  <div class="label">North Star Metric</div>
+  <div style="font-size:18px;color:#f0f6fc;font-weight:600;">Weekly Meaningful Cycle Management Users</div>
+  <div style="font-size:13px;color:#8b949e;margin-top:4px;">每周至少完成一次有意义的周期管理行为（记录/查看预测/阅读解释）的用户数</div>
+</div>
+
+<h3>2.1 北极星指标拆解</h3>
+<div class="metric-grid">
+  <div class="metric-card">
+    <div class="metric-name">获取 Acquisition</div>
+    <div class="metric-value">CAC</div>
+    <div class="metric-desc">用户获取成本；应用商店转化率</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-name">激活 Activation</div>
+    <div class="metric-value">D1留存</div>
+    <div class="metric-desc">完成Onboarding并首次查看预测的比例；目标≥50%</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-name">留存 Retention</div>
+    <div class="metric-value">7D/30D</div>
+    <div class="metric-desc">7日留存≥40%，30日留存≥25%</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-name">收入 Revenue</div>
+    <div class="metric-value">ARPU</div>
+    <div class="metric-desc">付费转化率；订阅续费率</div>
+  </div>
+</div>
+
+<h3>2.2 产品核心指标</h3>
+<table>
+  <thead><tr><th>指标</th><th>定义</th><th>目标</th><th>对应价值</th></tr></thead>
+  <tbody>
+    <tr><td><strong>记录完成率</strong></td><td>进入记录页后完成记录的用户比例</td><td>≥85%</td><td>数据基础</td></tr>
+    <tr><td><strong>预测查看率</strong></td><td>首页预测卡片的曝光-查看比例</td><td>≥70%</td><td>Predict</td></tr>
+    <tr><td><strong>Confidence查看率</strong></td><td>点击查看置信度详情的用户比例（核心差异化指标）</td><td>≥40%</td><td>Explain</td></tr>
+    <tr><td><strong>AI解释点击率</strong></td><td>点击"为什么这么预测"的用户比例</td><td>≥30%</td><td>Explain</td></tr>
+    <tr><td><strong>推迟说明阅读率</strong></td><td>推迟场景下阅读完整说明的用户比例</td><td>≥60%</td><td>Guide</td></tr>
+    <tr><td><strong>AI Helpful Rate</strong></td><td>AI回答的点赞/有用比例</td><td>≥70%</td><td>AI价值</td></tr>
+    <tr><td><strong>预测MAE</strong></td><td>预测平均绝对误差</td><td>≤3天（规律）/≤4天（不规则）</td><td>Predict</td></tr>
+    <tr><td><strong>焦虑相关差评率</strong></td><td>差评中提及"焦虑""吓人""不准"的比例</td><td>≤15%</td><td>体验红线</td></tr>
+    <tr><td><strong>低置信度用户记录提升率</strong></td><td>看到低置信度提示后7天内新增记录的比例</td><td>≥25%</td><td>行为引导</td></tr>
+  </tbody>
+</table>
+
+<h3>2.3 AI模型指标</h3>
+<table>
+  <thead><tr><th>指标</th><th>定义</th><th>目标</th></tr></thead>
+  <tbody>
+    <tr><td>预测准确率（±3天）</td><td>预测日期与实际日期相差≤3天的比例</td><td>≥75%（规律用户）/≥60%（不规则用户）</td></tr>
+    <tr><td>置信度校准度</td><td>声称80%置信度的预测中，实际准确的比例是否接近80%</td><td>校准误差≤10%</td></tr>
+    <tr><td>多协变量提升度</td><td>使用多协变量 vs 仅用周期历史的MAE提升</td><td>≥20%</td></tr>
+    <tr><td>AI症状推荐准确率</td><td>AI推荐的症状中用户实际选择的比例</td><td>≥50%</td></tr>
+    <tr><td>AI回答满意度</td><td>对话结束后用户评分（1-5）</td><td>≥4.0</td></tr>
+  </tbody>
+</table>
+
+<h2>3. A/B 测试计划（上线后）</h2>
+
+<div class="ab-card">
+  <h4>实验 1 — 置信度展示方式</h4>
+  <p><strong>对照组：</strong>百分比数字（72%）</p>
+  <p><strong>实验组A：</strong>进度条 + 文字描述（"中等置信度"）</p>
+  <p><strong>实验组B：</strong>三档标签（高/中/低）+ 颜色</p>
+  <p class="hypothesis"><strong>假设：</strong>进度条+文字描述的理解度最高，焦虑感最低；纯百分比对非技术用户不友好</p>
+  <p><strong>核心指标：</strong>Confidence查看率、用户理解度（问卷）、焦虑感评分</p>
+</div>
+
+<div class="ab-card">
+  <h4>实验 2 — 推迟场景文案</h4>
+  <p><strong>对照组：</strong>传统"经期延迟"警告（红色+感叹号）</p>
+  <p><strong>实验组：</strong>LunaCare分级说明（"比预测晚了X天"+可能原因+建议）</p>
+  <p class="hypothesis"><strong>假设：</strong>分级说明能显著降低用户焦虑感，同时提高行动率（记录症状/设置提醒）</p>
+  <p><strong>核心指标：</strong>推迟说明阅读率、焦虑相关差评率、推迟场景下的记录率</p>
+</div>
+
+<div class="ab-card">
+  <h4>实验 3 — AI推荐症状</h4>
+  <p><strong>对照组：</strong>纯手动选择症状标签</p>
+  <p><strong>实验组：</strong>AI推荐3个症状 + 手动补充</p>
+  <p class="hypothesis"><strong>假设：</strong>AI推荐能提高记录完成率和记录丰富度，同时降低记录时间</p>
+  <p><strong>核心指标：</strong>记录完成率、平均记录时间、每记录平均症状数</p>
+</div>
+
+<div class="ab-card">
+  <h4>实验 4 — 低置信度行动引导</h4>
+  <p><strong>对照组：</strong>仅显示"数据不足，预测不准"</p>
+  <p><strong>实验组：</strong>显示"数据不足"+具体行动指引（"再记录2个周期可提升至80%"）</p>
+  <p class="hypothesis"><strong>假设：</strong>具体行动指引能将低置信度用户的7日记录率从15%提升至30%+</p>
+  <p><strong>核心指标：</strong>低置信度用户记录提升率、新用户7日留存</p>
+</div>
+
+<h2>4. V1 → V2 迭代计划</h2>
+
+<div class="iteration-flow">
+  <div class="iter-step">
+    <div class="icon">🎨</div>
+    <div class="text">V1 Prototype</div>
+  </div>
+  <div class="iter-arrow">→</div>
+  <div class="iter-step">
+    <div class="icon">🧪</div>
+    <div class="text">Usability Test</div>
+  </div>
+  <div class="iter-arrow">→</div>
+  <div class="iter-step">
+    <div class="icon">📝</div>
+    <div class="text">Feedback Synthesis</div>
+  </div>
+  <div class="iter-arrow">→</div>
+  <div class="iter-step">
+    <div class="icon">✨</div>
+    <div class="text">V2 Prototype</div>
+  </div>
+</div>
+
+<h3>4.1 迭代流程</h3>
+<ol>
+  <li><strong>V1 原型完成</strong>：10个核心界面的高保真可交互原型</li>
+  <li><strong>可用性测试</strong>：5-8人，3个核心任务，记录完成率/时间/错误/用户原话</li>
+  <li><strong>反馈综合</strong>：
+    <ul>
+      <li>量化分析：任务完成率、SUS评分、焦虑感评分</li>
+      <li>定性分析：用户原话聚类、痛点优先级排序</li>
+      <li>输出：Top 5 问题清单 + 改进建议</li>
+    </ul>
+  </li>
+  <li><strong>V2 原型迭代</strong>：基于反馈修改原型，重点改进Top 3问题</li>
+  <li><strong>（可选）第二轮测试</strong>：3-5人验证关键问题是否解决</li>
+</ol>
+
+<h3>4.2 预期可能发现的问题（预设假设）</h3>
+<table>
+  <thead><tr><th>预设问题</th><th>风险等级</th><th>可能的V2改进方向</th></tr></thead>
+  <tbody>
+    <tr><td>用户不理解"置信度"概念</td><td>高</td><td>改用更通俗的语言（"预测较准/有一定不确定性/数据不足"），增加首次使用引导</td></tr>
+    <tr><td>低置信度让用户觉得产品没用</td><td>中</td><td>强化"如何提高准确度"的行动指引，将劣势转化为参与动机</td></tr>
+    <tr><td>推迟说明信息过载</td><td>中</td><td>默认只显示分级和核心建议，可能原因折叠为"查看详情"</td></tr>
+    <tr><td>AI推荐症状不准确</td><td>低</td><td>增加"不推荐"反馈按钮，优化推荐算法</td></tr>
+    <tr><td>用户担心隐私</td><td>中</td><td>Onboarding中更突出隐私模式选择，增加端侧模式说明</td></tr>
+  </tbody>
+</table>
+
+<h3>4.3 验证完成后的产出</h3>
+<ul>
+  <li>可用性测试报告（含量化数据+定性发现+用户原话）</li>
+  <li>V2改进版原型</li>
+  <li>迭代记录（V1→V2改了什么、为什么改、效果如何）</li>
+  <li>作品集更新：在Case Study中增加"验证与迭代"章节</li>
+</ul>
+
+<div class="highlight" style="margin-top:32px;">
+  <div class="label">Why This Matters</div>
+  <div style="font-size:14px;">完成一轮真实的可用性测试并展示V1→V2迭代，是将LunaCare从"课堂作业感"变成"真正产品作品"的关键。面试官看到的不是一个完美的设计，而是一个会学习、会迭代的产品经理。这比任何精美的界面都更有说服力。</div>
+</div>
+
+<div style="margin-top:48px; padding-top:24px; border-top:1px solid #21262d; text-align:center; font-size:13px; color:#8b949e;">
+  <p>钱彬娴 · LunaCare Validation Plan · Case 02</p>
+  <p style="margin-top:4px;">Related: Case 01 — Flo Health Product Experience Analysis</p>
+</div>
+
+</div>
+</body>
+</html>

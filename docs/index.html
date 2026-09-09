@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LunaCare | AI周期健康助手 — 0→1产品概念设计</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  .header {
+    border-bottom: 1px solid #21262d;
+    padding: 48px 0 32px;
+    margin-bottom: 40px;
+  }
+  .badge {
+    display: inline-block;
+    background: #1c3d2e;
+    color: #7ee787;
+    border: 1px solid #238636;
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #f0f6fc;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .header .subtitle {
+    font-size: 18px;
+    color: #8b949e;
+    margin-bottom: 20px;
+  }
+  .header .tagline {
+    font-size: 15px;
+    color: #7ee787;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: inline-block;
+  }
+
+  /* Meta */
+  .meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .meta-item { font-size: 13px; color: #8b949e; }
+  .meta-item strong { color: #c9d1d9; }
+
+  /* Nav */
+  .nav {
+    position: sticky;
+    top: 0;
+    background: rgba(13,17,23,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #21262d;
+    padding: 12px 0;
+    margin-bottom: 40px;
+    z-index: 100;
+    overflow-x: auto;
+  }
+  .nav-inner {
+    display: flex;
+    gap: 16px;
+    white-space: nowrap;
+  }
+  .nav a {
+    color: #8b949e;
+    text-decoration: none;
+    font-size: 13px;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav a:hover { color: #f0f6fc; border-bottom-color: #7ee787; }
+
+  /* Section */
+  .section { margin-bottom: 56px; }
+  .section-num {
+    font-size: 13px;
+    color: #7ee787;
+    font-family: 'SF Mono', monospace;
+    margin-bottom: 4px;
+  }
+  .section h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #f0f6fc;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #21262d;
+  }
+  .section h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #f0f6fc;
+    margin: 24px 0 12px;
+  }
+  .section p { margin-bottom: 16px; }
+  .section ul, .section ol { margin: 0 0 16px 24px; }
+  .section li { margin-bottom: 8px; }
+
+  /* Highlight box */
+  .highlight {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-left: 3px solid #7ee787;
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .highlight .label {
+    font-size: 11px;
+    color: #7ee787;
+    font-family: 'SF Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .highlight .content {
+    font-size: 17px;
+    color: #f0f6fc;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  /* HMW box */
+  .hmw {
+    background: linear-gradient(135deg, #1c3d2e 0%, #161b22 100%);
+    border: 1px solid #238636;
+    border-radius: 12px;
+    padding: 32px;
+    margin: 24px 0;
+    text-align: center;
+  }
+  .hmw .prefix {
+    font-size: 13px;
+    color: #7ee787;
+    font-family: 'SF Mono', monospace;
+    margin-bottom: 12px;
+  }
+  .hmw .question {
+    font-size: 20px;
+    color: #f0f6fc;
+    font-weight: 600;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .hmw .translation {
+    font-size: 14px;
+    color: #8b949e;
+  }
+
+  /* Three columns */
+  .three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .col-card {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .col-card .icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  .col-card .title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #7ee787;
+    margin-bottom: 8px;
+    font-family: 'SF Mono', monospace;
+  }
+  .col-card .desc {
+    font-size: 13px;
+    color: #8b949e;
+    line-height: 1.6;
+  }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 20px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  th {
+    background: #161b22;
+    color: #f0f6fc;
+    text-align: left;
+    padding: 12px 16px;
+    border: 1px solid #21262d;
+    font-weight: 600;
+  }
+  td {
+    padding: 12px 16px;
+    border: 1px solid #21262d;
+    color: #c9d1d9;
+  }
+  tr:nth-child(even) td { background: #161b22; }
+  .p0 { color: #f85149; font-weight: 600; }
+  .p1 { color: #d29922; font-weight: 600; }
+  .p2 { color: #8b949e; }
+
+  /* Persona */
+  .persona {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 12px;
+    padding: 28px;
+    margin: 24px 0;
+  }
+  .persona-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #21262d;
+  }
+  .persona-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7ee787, #238636);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #0d1117;
+  }
+  .persona-name { font-size: 22px; font-weight: 700; color: #f0f6fc; }
+  .persona-tag { font-size: 13px; color: #8b949e; margin-top: 2px; }
+  .persona-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .persona-field h4 {
+    font-size: 12px;
+    color: #7ee787;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .persona-field p { font-size: 14px; color: #c9d1d9; margin: 0; }
+
+  /* Code block */
+  .code-block {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+  .code-block .comment { color: #8b949e; }
+  .code-block .key { color: #7ee787; }
+  .code-block .val { color: #d2a8ff; }
+
+  /* Metrics grid */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .metric-card {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .metric-name { font-size: 14px; font-weight: 600; color: #f0f6fc; margin-bottom: 4px; }
+  .metric-desc { font-size: 12px; color: #8b949e; }
+
+  /* Footer */
+  .footer {
+    border-top: 1px solid #21262d;
+    padding: 40px 0;
+    margin-top: 60px;
+    text-align: center;
+  }
+  .footer p { font-size: 13px; color: #8b949e; margin-bottom: 8px; }
+  .footer .author { color: #f0f6fc; font-weight: 600; }
+
+  /* File tree */
+  .file-tree {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    padding: 20px;
+    font-family: 'SF Mono', monospace;
+    font-size: 13px;
+    line-height: 2;
+    margin: 20px 0;
+  }
+  .file-tree .folder { color: #79c0ff; }
+  .file-tree .file { color: #c9d1d9; }
+  .file-tree .indent { padding-left: 20px; }
+
+  @media (max-width: 640px) {
+    .three-col { grid-template-columns: 1fr; }
+    .persona-grid { grid-template-columns: 1fr; }
+    .metrics-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <span class="badge">Self-initiated 0→1 AI Product Concept</span>
+    <h1>🌙 LunaCare</h1>
+    <p class="subtitle">An AI-powered cycle companion designed around uncertainty, transparency and trust.</p>
+    <div class="tagline">Predict → Explain → Guide</div>
+    <div class="meta">
+      <div class="meta-item"><strong>角色：</strong>Product Designer & PM</div>
+      <div class="meta-item"><strong>周期：</strong>4周</div>
+      <div class="meta-item"><strong>类型：</strong>概念产品 / Case Study</div>
+      <div class="meta-item"><strong>关联：</strong>Case 01 Flo Health 分析</div>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#bg">01 背景</a>
+      <a href="#problem">02 问题定义</a>
+      <a href="#research">03 用户研究</a>
+      <a href="#persona">04 Persona</a>
+      <a href="#positioning">05 定位</a>
+      <a href="#value">06 核心价值</a>
+      <a href="#architecture">07 架构</a>
+      <a href="#mvp">08 MVP</a>
+      <a href="#flow">09 User Flow</a>
+      <a href="#prd">10 PRD</a>
+      <a href="#ai">11 AI逻辑</a>
+      <a href="#figma">12 Figma</a>
+      <a href="#metrics">13 Metrics</a>
+      <a href="#validation">14 验证</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- 01 背景 -->
+<div class="section" id="bg">
+  <div class="section-num">01 / BACKGROUND</div>
+  <h2>项目背景</h2>
+
+  <div class="highlight">
+    <div class="label">Observation</div>
+    <div class="content">经期追踪产品已经非常成熟，但 AI 能力增加之后，很多产品仍然把 AI 当成"预测日期"或者"问答助手"。</div>
+  </div>
+
+  <p>基于对 Flo Health 的深度竞品分析，一个被行业普遍忽视的问题浮现出来：对于周期不规律的用户（约占女性人群的50%），核心问题从来不是"AI能不能告诉我一个日期"，而是<strong style="color:#f0f6fc;">"这个日期到底有多可信？"</strong></p>
+
+  <div class="highlight">
+    <div class="label">Problem</div>
+    <div class="content">现有产品给出一个确定的预测日期，但不告诉用户这个预测有多准。当预测出错时，用户感受到的不是"AI在学习"，而是"AI在骗我"。</div>
+  </div>
+
+  <div class="highlight">
+    <div class="label">Opportunity</div>
+    <div class="content">LunaCare 探索：如何让 AI 健康预测更加透明、低焦虑、个性化。不是追求"预测最准"，而是追求"让用户理解不确定性，并知道接下来该做什么"。</div>
+  </div>
+</div>
+
+<!-- 02 问题定义 -->
+<div class="section" id="problem">
+  <div class="section-num">02 / PROBLEM DEFINITION</div>
+  <h2>核心问题定义</h2>
+
+  <p>经过对Flo Health的竞品分析、App Store 2000+条差评的聚类分析、以及学术文献研究，问题收敛为一个 How Might We：</p>
+
+  <div class="hmw">
+    <div class="prefix">HOW MIGHT WE</div>
+    <div class="question">help users with irregular periods understand and manage cycle uncertainty without creating unnecessary anxiety?</div>
+    <div class="translation">我们如何帮助周期不规律的用户理解和管理周期的不确定性，同时避免产品制造不必要的健康焦虑？</div>
+  </div>
+
+  <p>问题定义的四个维度：</p>
+  <ul>
+    <li><strong style="color:#f0f6fc;">聚焦特定人群</strong>：周期不规律的用户，而不是所有女性</li>
+    <li><strong style="color:#f0f6fc;">聚焦核心矛盾</strong>：不确定性的理解与管理，而不是功能堆砌</li>
+    <li><strong style="color:#f0f6fc;">包含约束条件</strong>：不制造焦虑，这是产品设计的红线</li>
+    <li><strong style="color:#f0f6fc;">开放解决方案</strong>：How Might We 不预设答案，允许探索多种可能</li>
+  </ul>
+</div>
+
+<!-- 03 用户研究 -->
+<div class="section" id="research">
+  <div class="section-num">03 / USER RESEARCH</div>
+  <h2>用户研究</h2>
+
+  <div class="highlight">
+    <div class="label">Research Status</div>
+    <div class="content" style="font-size:14px;">本研究为 <strong style="color:#d29922;">Research Plan + Secondary Research</strong>。已完成竞品评论分析（2000+条）和学术文献研究；一手问卷与访谈为计划执行方案，标注为 Proposed。</div>
+  </div>
+
+  <h3>核心研究问题</h3>
+  <ol>
+    <li>为什么用户记录经期？核心动机是什么？</li>
+    <li>什么情况下用户最频繁打开 App？</li>
+    <li>用户为什么放弃记录？</li>
+    <li>预测错了以后用户会怎么办？</li>
+    <li>用户如何理解"AI预测"？</li>
+    <li>用户愿意把哪些身体数据交给 AI？</li>
+    <li>什么情况下用户会信任 / 不信任 AI？</li>
+  </ol>
+
+  <h3>研究方法</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>方法</th><th>样本</th><th>状态</th><th>目的</th></tr></thead>
+      <tbody>
+        <tr><td>竞品评论分析</td><td>2000+条</td><td style="color:#7ee787;">✅ 已完成</td><td>痛点聚类、需求提取</td></tr>
+        <tr><td>学术文献研究</td><td>15+篇</td><td style="color:#7ee787;">✅ 已完成</td><td>AI预测准确率、用户行为</td></tr>
+        <tr><td>在线问卷</td><td>30-50人</td><td style="color:#d29922;">📋 Proposed</td><td>定量验证痛点优先级</td></tr>
+        <tr><td>深度访谈</td><td>5-8人</td><td style="color:#d29922;">📋 Proposed</td><td>定性挖掘行为动机</td></tr>
+        <tr><td>可用性测试</td><td>5-8人</td><td style="color:#d29922;">📋 Proposed</td><td>原型验证、V2迭代</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>二手研究关键发现</h3>
+  <div class="three-col">
+    <div class="col-card">
+      <div class="icon">📊</div>
+      <div class="title">34%</div>
+      <div class="desc">App Store差评提及"预测不准"，是第一大痛点</div>
+    </div>
+    <div class="col-card">
+      <div class="icon">😰</div>
+      <div class="title">31%</div>
+      <div class="desc">差评提及"经期延迟警告制造焦虑"</div>
+    </div>
+    <div class="col-card">
+      <div class="icon">🔒</div>
+      <div class="title">28%</div>
+      <div class="desc">差评提及隐私担忧，FTC事件影响持续</div>
+    </div>
+  </div>
+
+  <p style="margin-top:16px;">📎 完整研究材料（问卷模板、访谈提纲、调研结论）见 <code style="background:#161b22;padding:2px 6px;border-radius:4px;font-size:13px;">research/user-research.html</code></p>
+</div>
+
+<!-- 04 Persona -->
+<div class="section" id="persona">
+  <div class="section-num">04 / PERSONA</div>
+  <h2>核心用户 Persona</h2>
+
+  <p>LunaCare MVP 阶段聚焦核心用户 Luna。</p>
+
+  <div class="persona">
+    <div class="persona-header">
+      <div class="persona-avatar">L</div>
+      <div>
+        <div class="persona-name">Luna，26岁</div>
+        <div class="persona-tag">互联网公司运营 · 一线城市独居 · 周期不规律</div>
+      </div>
+    </div>
+    <div class="persona-grid">
+      <div class="persona-field">
+        <h4>Core Job</h4>
+        <p>"我想提前知道什么时候来，并确认自己的身体变化是不是正常。"</p>
+      </div>
+      <div class="persona-field">
+        <h4>周期状况</h4>
+        <p>25-35天波动，近半年2次推迟超7天，轻度痛经，经前头痛+情绪波动</p>
+      </div>
+      <div class="persona-field">
+        <h4>使用行为</h4>
+        <p>经期前3天每天打开看预测；经期当天记录；推迟时每天多次打开；很少记录症状</p>
+      </div>
+      <div class="persona-field">
+        <h4>核心痛点</h4>
+        <p>预测不准 / 不知道可信度 / 推迟后焦虑 / AI回答太泛 / 记录太麻烦</p>
+      </div>
+      <div class="persona-field">
+        <h4>对AI的期待</h4>
+        <p>"希望AI告诉我这次预测有多准，推迟时帮我分析原因，而不是吓我。"</p>
+      </div>
+      <div class="persona-field">
+        <h4>付费意愿</h4>
+        <p>愿意为"真正准确的预测+个性化建议"付费，但当前AI助手不值这个价</p>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:13px;color:#8b949e;">注：Luna 为基于二手研究构建的初始假设 Persona。后续一手研究完成后将根据真实数据修正。</p>
+</div>
+
+<!-- 05 定位 -->
+<div class="section" id="positioning">
+  <div class="section-num">05 / POSITIONING</div>
+  <h2>产品定位</h2>
+
+  <div class="highlight">
+    <div class="label">Positioning Statement</div>
+    <div class="content">LunaCare 是一款以"理解身体的不确定性"为核心的 AI 女性周期健康助手。</div>
+  </div>
+
+  <p>重点不是"预测最准"，而是：</p>
+
+  <div class="code-block">
+    <span class="comment">// LunaCare 产品理念</span><br>
+    <span class="key">Predict</span> <span class="val">with uncertainty</span> — 带着不确定性去预测<br>
+    <span class="key">Explain</span> <span class="val">why</span> — 解释为什么这么预测<br>
+    <span class="key">Guide</span> <span class="val">what to do next</span> — 指引接下来该做什么
+  </div>
+
+</div>
+
+<!-- 06 核心价值 -->
+<div class="section" id="value">
+  <div class="section-num">06 / CORE VALUE</div>
+  <h2>核心价值</h2>
+
+  <p>LunaCare 的三个核心价值：</p>
+
+  <div class="three-col">
+    <div class="col-card">
+      <div class="icon">🔮</div>
+      <div class="title">Predict</div>
+      <div class="desc">告诉用户什么时候可能来。基于周期历史+睡眠+压力+运动+症状的多协变量AI预测，输出预测日期+置信区间。</div>
+    </div>
+    <div class="col-card">
+      <div class="icon">💡</div>
+      <div class="title">Explain</div>
+      <div class="desc">告诉用户为什么这么预测、这次预测有多可信。置信度透明展示，预测依据可查，数据不足时诚实说明。</div>
+    </div>
+    <div class="col-card">
+      <div class="icon">🧭</div>
+      <div class="title">Guide</div>
+      <div class="desc">告诉用户如果情况变化，接下来应该做什么。异常分级预警，明确就医红线，不制造不必要的焦虑。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 07 架构 -->
+<div class="section" id="architecture">
+  <div class="section-num">07 / PRODUCT ARCHITECTURE</div>
+  <h2>产品架构</h2>
+
+  <div class="code-block">
+    <span class="folder">LunaCare</span><br>
+    ├── <span class="folder">Home</span><br>
+    │   ├── Cycle Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 当前周期第几天</span><br>
+    │   ├── AI Prediction &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 预测日期+置信度</span><br>
+    │   └── Quick Log &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 一键记录入口</span><br>
+    ├── <span class="folder">Calendar</span><br>
+    │   ├── Period History<br>
+    │   ├── Prediction View<br>
+    │   └── Symptoms Log<br>
+    ├── <span class="folder">Insights</span><br>
+    │   ├── Cycle Trends<br>
+    │   ├── Symptom Patterns<br>
+    │   └── AI Insights<br>
+    ├── <span class="folder">AI Companion</span><br>
+    │   ├── Ask Luna<br>
+    │   ├── Personalized Explanation<br>
+    │   └── Health Guidance<br>
+    └── <span class="folder">Profile</span><br>
+    &nbsp;&nbsp;&nbsp;├── Health Data<br>
+    &nbsp;&nbsp;&nbsp;├── Privacy Settings<br>
+    &nbsp;&nbsp;&nbsp;└── Data Export / Delete
+  </div>
+
+  <p style="margin-top:16px;">📎 正式 Product Architecture Diagram 见 <code style="background:#161b22;padding:2px 6px;border-radius:4px;font-size:13px;">assets/product-architecture.svg</code></p>
+</div>
+
+<!-- 08 MVP -->
+<div class="section" id="mvp">
+  <div class="section-num">08 / MVP</div>
+  <h2>MVP 功能规划</h2>
+
+  <p>LunaCare MVP 包含 <strong style="color:#7ee787;">4个P0核心功能</strong>：</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>优先级</th><th>功能</th><th>说明</th><th>对应价值</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="p0">P0</td>
+          <td><strong>AI周期预测</strong></td>
+          <td>多协变量预测模型，输出预测日期+置信区间</td>
+          <td>Predict</td>
+        </tr>
+        <tr>
+          <td class="p0">P0</td>
+          <td><strong>Prediction Confidence</strong></td>
+          <td>置信度透明展示，预测依据可查，数据不足诚实说明</td>
+          <td>Explain</td>
+        </tr>
+        <tr>
+          <td class="p0">P0</td>
+          <td><strong>一键记录</strong></td>
+          <td>1键记录经期开始/结束，AI自动推荐症状标签</td>
+          <td>数据基础</td>
+        </tr>
+        <tr>
+          <td class="p0">P0</td>
+          <td><strong>异常/不确定性解释</strong></td>
+          <td>取代"延迟警告"，分级说明+可能原因+行动指引</td>
+          <td>Guide</td>
+        </tr>
+        <tr>
+          <td class="p1">P1</td>
+          <td>AI Companion</td>
+          <td>对话式健康助手，结合个人数据的个性化回答</td>
+          <td>Explain + Guide</td>
+        </tr>
+        <tr>
+          <td class="p1">P1</td>
+          <td>健康洞察</td>
+          <td>症状-行为关联分析，周期趋势追踪</td>
+          <td>Explain</td>
+        </tr>
+        <tr>
+          <td class="p2">P2</td>
+          <td>社区/内容</td>
+          <td>健康知识库，匿名社区讨论</td>
+          <td>生态</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight">
+    <div class="label">MVP Philosophy</div>
+    <div class="content" style="font-size:15px;">AI Companion 先作为 P1，不是因为不重要，而是因为 Predict→Explain→Guide 的核心闭环必须先跑通。没有准确的预测和透明的解释，AI助手只是一个更会说话的搜索引擎。</div>
+  </div>
+</div>
+
+<!-- 09 User Flow -->
+<div class="section" id="flow">
+  <div class="section-num">09 / USER FLOW</div>
+  <h2>核心用户流程</h2>
+
+  <p>三个核心用户流程：</p>
+
+  <h3>Flow A — 首次注册</h3>
+  <div class="code-block">
+    Onboarding → 周期信息(3步) → Privacy选择 → AI初始预测 → Home<br>
+    <span class="comment">// 设计要点：从Flo的8-10步缩减到3步；隐私选项前置；初始预测诚实标注低置信度</span>
+  </div>
+
+  <h3>Flow B — 日常记录</h3>
+  <div class="code-block">
+    Home → Quick Log → 经期/症状确认 → AI Prediction Updated<br>
+    <span class="comment">// 设计要点：核心信息1步完成；AI自动推荐症状标签；记录后即时反馈预测已更新</span>
+  </div>
+
+  <h3>Flow C — 经期推迟（最关键）</h3>
+  <div class="code-block">
+    Prediction Date → Delay Detected → Confidence Re-calculated<br>
+    → Explain Why (可能原因) → Observe / Consult Doctor<br>
+    <span class="comment">// 设计要点：取代"延迟警告"；分级说明（正常波动/需关注/建议就医）；给行动指引而非制造焦虑</span>
+  </div>
+
+  <p style="margin-top:16px;">📎 正式 User Flow Diagram 见 <code style="background:#161b22;padding:2px 6px;border-radius:4px;font-size:13px;">assets/user-flow.svg</code></p>
+</div>
+
+<!-- 10 PRD -->
+<div class="section" id="prd">
+  <div class="section-num">10 / PRD</div>
+  <h2>核心功能 PRD</h2>
+
+  <p>核心功能 PRD 聚焦最具差异化的功能：</p>
+
+  <div class="highlight">
+    <div class="label">PRD Focus</div>
+    <div class="content">《LunaCare｜AI Prediction Confidence PRD》</div>
+  </div>
+
+  <p>PRD 包含：</p>
+  <ul>
+    <li>背景与目标</li>
+    <li>用户故事（User Stories）</li>
+    <li>功能逻辑与规则</li>
+    <li>页面状态（高/中/低置信度）</li>
+    <li>正常流程与异常情况</li>
+    <li>AI输入/输出定义</li>
+    <li>埋点方案</li>
+    <li>验收标准（Acceptance Criteria）</li>
+  </ul>
+
+  <p>📎 完整 PRD 见 <code style="background:#161b22;padding:2px 6px;border-radius:4px;font-size:13px;">prd/prediction-confidence-prd.html</code></p>
+</div>
+
+<!-- 11 AI逻辑 -->
+<div class="section" id="ai">
+  <div class="section-num">11 / AI PRODUCT LOGIC</div>
+  <h2>AI 产品逻辑</h2>
+
+  <p>AI 产品逻辑定义输入数据、预测系统、输出结果，以及产品层如何根据不同置信度做差异化处理。</p>
+
+  <div class="code-block">
+    <span class="key">User Data</span><br>
+    ├─ Cycle History &nbsp;&nbsp;<span class="comment">// 周期历史</span><br>
+    ├─ Sleep &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 睡眠数据</span><br>
+    ├─ Symptoms &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 症状记录</span><br>
+    ├─ Stress &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 压力指数</span><br>
+    └─ Activity &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 运动数据</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+    <span class="key">Prediction System</span> &nbsp;<span class="comment">// XGBoost + LSTM 混合模型</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+    <span class="key">Output</span><br>
+    ├─ Expected Date &nbsp;&nbsp;&nbsp;<span class="comment">// 预测日期</span><br>
+    ├─ Prediction Range &nbsp;<span class="comment">// 置信区间（±N天）</span><br>
+    ├─ Confidence &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 置信度（0-100%）</span><br>
+    └─ Explanation &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 预测依据说明</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+    <span class="key">Product Layer</span><br>
+    ├─ <span style="color:#7ee787;">High Confidence (≥80%)</span> → normal prediction display<br>
+    ├─ <span style="color:#d29922;">Medium Confidence (50-80%)</span> → show uncertainty explicitly<br>
+    └─ <span style="color:#f85149;">Low Confidence (&lt;50%)</span> → avoid definitive conclusion, suggest more data
+  </div>
+
+  <div class="highlight">
+    <div class="label">Key Insight</div>
+    <div class="content" style="font-size:15px;">AI 产品不能只考虑 happy path。低置信度时，产品的正确做法不是"给一个看起来确定的答案"，而是"诚实告诉用户我不确定，并建议如何获得更确定的结果"。</div>
+  </div>
+</div>
+
+<!-- 12 Figma -->
+<div class="section" id="figma">
+  <div class="section-num">12 / FIGMA PROTOTYPE</div>
+  <h2>Figma 可交互原型</h2>
+
+  <p>第一版包含10个核心页面：</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>页面</th><th>核心内容</th></tr></thead>
+      <tbody>
+        <tr><td>01</td><td>Splash</td><td>启动页，品牌展示</td></tr>
+        <tr><td>02</td><td>Onboarding</td><td>3步基础信息收集</td></tr>
+        <tr><td>03</td><td>Privacy</td><td>隐私模式选择，数据使用说明</td></tr>
+        <tr><td>04</td><td>Home</td><td>周期状态+AI预测+置信度+一键记录</td></tr>
+        <tr><td>05</td><td>Quick Log</td><td>一键记录，AI推荐症状标签</td></tr>
+        <tr><td>06</td><td>Prediction Detail</td><td>预测详情，置信区间展示</td></tr>
+        <tr><td>07</td><td>Prediction Explanation</td><td>预测依据解释，数据来源透明</td></tr>
+        <tr><td>08</td><td>Delay / Uncertainty</td><td>推迟场景，分级说明+行动指引</td></tr>
+        <tr><td>09</td><td>AI Companion</td><td>对话式健康助手</td></tr>
+        <tr><td>10</td><td>Insights</td><td>健康洞察，症状关联分析</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>📎 可交互原型见 <code style="background:#161b22;padding:2px 6px;border-radius:4px;font-size:13px;">prototype/prototype.html</code>（HTML高保真模拟，可点击交互）</p>
+</div>
+
+<!-- 13 Metrics -->
+<div class="section" id="metrics">
+  <div class="section-num">13 / METRICS</div>
+  <h2>数据指标</h2>
+
+  <div class="highlight">
+    <div class="label">North Star Metric</div>
+    <div class="content">Weekly Meaningful Cycle Management Users<br><span style="font-size:13px;color:#8b949e;">每周至少完成一次有意义的周期管理行为（记录/查看预测/阅读解释）的用户数</span></div>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-name">记录完成率</div>
+      <div class="metric-desc">进入记录页后完成记录的用户比例，目标≥85%</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-name">预测查看率</div>
+      <div class="metric-desc">首页预测卡片的曝光-查看比例</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-name">Confidence查看率</div>
+      <div class="metric-desc">点击查看置信度详情的用户比例，核心差异化指标</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-name">AI解释点击率</div>
+      <div class="metric-desc">点击"为什么这么预测"的用户比例</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-name">7D / 30D Retention</div>
+      <div class="metric-desc">次日≥40%，30日≥25%</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-name">AI Helpful Rate</div>
+      <div class="metric-desc">AI回答的点赞/有用比例，目标≥70%</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-name">预测MAE</div>
+      <div class="metric-desc">预测平均绝对误差，目标≤3天（规则）/≤4天（不规则）</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-name">焦虑相关差评率</div>
+      <div class="metric-desc">差评中提及"焦虑""吓人""不准"的比例，目标≤15%</div>
+    </div>
+  </div>
+
+  <p style="font-size:13px;color:#8b949e;">注：以上为 Proposed Metrics，非实际结果。概念产品阶段用于定义成功标准和验证方向。</p>
+</div>
+
+<!-- 14 验证 -->
+<div class="section" id="validation">
+  <div class="section-num">14 / VALIDATION</div>
+  <h2>验证方案</h2>
+
+  <p>通过可用性测试验证设计假设，驱动原型迭代。</p>
+
+  <h3>可用性测试计划</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>项目</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td><strong>参与者</strong></td><td>5-8人，优先周期不规律的女性用户</td></tr>
+        <tr><td><strong>方法</strong></td><td>远程屏幕共享 + 出声思考（Think Aloud）</td></tr>
+        <tr><td><strong>任务1</strong></td><td>查看下一次预测，理解预测可信度</td></tr>
+        <tr><td><strong>任务2</strong></td><td>记录今天经期开始，完成一次记录</td></tr>
+        <tr><td><strong>任务3</strong></td><td>经期推迟5天，判断是否需要担心，知道接下来该做什么</td></tr>
+        <tr><td><strong>记录指标</strong></td><td>任务完成率、完成时间、用户理解度、错误点、用户原话</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>迭代循环</h3>
+  <div class="code-block">
+    <span class="key">V1 Prototype</span> → <span class="key">Usability Test</span> → <span class="key">Feedback Synthesis</span> → <span class="key">V2 Prototype</span><br>
+    <span class="comment">// 通过测试-迭代循环持续优化产品</span>
+  </div>
+
+  <h3>A/B 测试计划（上线后）</h3>
+  <ul>
+    <li><strong>置信度展示方式</strong>：进度条 vs 百分比 vs 文字描述，对用户理解度和焦虑感的影响</li>
+    <li><strong>推迟场景文案</strong>：分级说明 vs 传统警告，对用户焦虑感和行动率的影响</li>
+    <li><strong>AI推荐症状</strong>：AI推荐 vs 手动选择，对记录完成率和记录丰富度的影响</li>
+  </ul>
+</div>
+
+<!-- 文件结构 -->
+<div class="section">
+  <div class="section-num">APPENDIX</div>
+  <h2>项目文件结构</h2>
+
+  <div class="file-tree">
+    <span class="folder">lunacare-ai-product/</span><br>
+    ├── <span class="file">README.html</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 完整Case Study</span><br>
+    ├── <span class="folder">research/</span><br>
+    │   └── <span class="file">user-research.html</span> &nbsp;<span class="comment">// 研究计划+问卷+访谈提纲+结论</span><br>
+    ├── <span class="folder">prd/</span><br>
+    │   └── <span class="file">prediction-confidence-prd.html</span><br>
+    ├── <span class="folder">assets/</span><br>
+    │   ├── <span class="file">product-architecture.svg</span><br>
+    │   ├── <span class="file">user-flow.svg</span><br>
+    │   └── <span class="file">ai-logic.svg</span><br>
+    ├── <span class="folder">prototype/</span><br>
+    │   └── <span class="file">prototype.html</span> &nbsp;&nbsp;<span class="comment">// 10页可交互高保真原型</span><br>
+    └── <span class="folder">validation/</span><br>
+    &nbsp;&nbsp;&nbsp;└── <span class="file">usability-test-plan.html</span>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="container">
+    <p class="author">钱彬娴 · Product Designer & PM</p>
+    <p>Case 02 LunaCare · Self-initiated 0→1 AI Product Concept</p>
+    <p style="margin-top:12px;font-size:12px;">Related: Case 01 — Flo Health Product Experience Analysis</p>
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LunaCare | Figma 高保真可交互原型</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    min-height: 100vh;
+  }
+
+  .header {
+    text-align: center;
+    padding: 40px 20px 20px;
+  }
+  .header h1 { color: #f0f6fc; font-size: 24px; margin-bottom: 8px; }
+  .header p { color: #8b949e; font-size: 14px; }
+
+  .nav-bar {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 20px;
+    flex-wrap: wrap;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .nav-btn {
+    padding: 6px 12px;
+    border-radius: 16px;
+    border: 1px solid #21262d;
+    background: #161b22;
+    color: #8b949e;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .nav-btn:hover { border-color: #7ee787; color: #7ee787; }
+  .nav-btn.active { background: #0d2818; border-color: #238636; color: #7ee787; }
+
+  .prototype-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    min-height: 860px;
+  }
+
+  .phone {
+    width: 375px;
+    height: 812px;
+    background: #fafafa;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 12px #1c1c1e, 0 0 0 14px #2c2c2e;
+  }
+
+  .screen {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: none;
+    flex-direction: column;
+    background: #fafafa;
+  }
+  .screen.active { display: flex; }
+
+  .status-bar {
+    height: 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1c1c1e;
+    flex-shrink: 0;
+  }
+  .status-bar.dark { color: #fff; }
+
+  .screen-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px;
+  }
+
+  .home-indicator {
+    height: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .home-indicator div {
+    width: 134px;
+    height: 5px;
+    background: #1c1c1e;
+    border-radius: 3px;
+  }
+  .home-indicator.light div { background: #fff; }
+
+  /* Splash */
+  .splash {
+    background: linear-gradient(180deg, #0d2818 0%, #1a3a2a 100%);
+    justify-content: center;
+    align-items: center;
+  }
+  .splash-logo {
+    font-size: 72px;
+    margin-bottom: 16px;
+  }
+  .splash-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .splash-tagline {
+    font-size: 14px;
+    color: #7ee787;
+    font-family: monospace;
+  }
+
+  /* Onboarding */
+  .onboarding-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1c1c1e;
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+  .onboarding-sub {
+    font-size: 14px;
+    color: #8e8e93;
+    margin-bottom: 32px;
+  }
+  .input-group { margin-bottom: 20px; }
+  .input-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1c1c1e;
+    margin-bottom: 8px;
+  }
+  .input-field {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid #e5e5ea;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #1c1c1e;
+    background: #fff;
+    font-family: inherit;
+  }
+  .input-field:focus { border-color: #7ee787; outline: none; }
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    background: #238636;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    margin-top: 12px;
+  }
+  .btn-secondary {
+    width: 100%;
+    padding: 14px;
+    background: #f0f0f5;
+    color: #1c1c1e;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    margin-top: 10px;
+  }
+  .step-indicator {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .step-dot {
+    width: 24px;
+    height: 4px;
+    border-radius: 2px;
+    background: #e5e5ea;
+  }
+  .step-dot.active { background: #238636; }
+
+  /* Privacy */
+  .privacy-card {
+    background: #fff;
+    border: 1.5px solid #e5e5ea;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .privacy-card.selected { border-color: #238636; background: #f0fff4; }
+  .privacy-card h4 { font-size: 15px; color: #1c1c1e; margin-bottom: 4px; }
+  .privacy-card p { font-size: 12px; color: #8e8e93; }
+
+  /* Home */
+  .home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0 16px;
+  }
+  .home-greeting h2 { font-size: 22px; font-weight: 700; color: #1c1c1e; }
+  .home-greeting p { font-size: 13px; color: #8e8e93; }
+  .avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7ee787, #238636);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 16px;
+  }
+
+  .prediction-card {
+    background: linear-gradient(135deg, #0d2818 0%, #1a3a2a 100%);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+    color: #fff;
+    cursor: pointer;
+  }
+  .prediction-card .label {
+    font-size: 12px;
+    color: #7ee787;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .prediction-card .date {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .prediction-card .range {
+    font-size: 13px;
+    color: #a8d8b0;
+    margin-bottom: 16px;
+  }
+  .confidence-bar {
+    background: rgba(255,255,255,0.15);
+    height: 6px;
+    border-radius: 3px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .confidence-fill {
+    height: 100%;
+    background: #7ee787;
+    border-radius: 3px;
+  }
+  .confidence-text {
+    font-size: 11px;
+    color: #a8d8b0;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .quick-log-btn {
+    width: 100%;
+    padding: 18px;
+    background: #238636;
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .info-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid #f0f0f5;
+  }
+  .info-card h4 { font-size: 14px; color: #1c1c1e; margin-bottom: 6px; }
+  .info-card p { font-size: 12px; color: #8e8e93; }
+
+  .tab-bar {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 12px;
+    background: #fff;
+    border-top: 1px solid #f0f0f5;
+    flex-shrink: 0;
+  }
+  .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 10px;
+    color: #8e8e93;
+    cursor: pointer;
+  }
+  .tab-item.active { color: #238636; }
+  .tab-icon { font-size: 20px; }
+
+  /* Quick Log */
+  .log-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0 20px;
+  }
+  .back-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: #f0f0f5;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .log-header h2 { font-size: 20px; font-weight: 700; color: #1c1c1e; }
+
+  .log-option {
+    background: #fff;
+    border: 2px solid #e5e5ea;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .log-option.selected { border-color: #238636; background: #f0fff4; }
+  .log-option .icon { font-size: 24px; }
+  .log-option .text h4 { font-size: 15px; color: #1c1c1e; }
+  .log-option .text p { font-size: 12px; color: #8e8e93; }
+
+  .symptom-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .symptom-tag {
+    padding: 10px 8px;
+    background: #fff;
+    border: 1.5px solid #e5e5ea;
+    border-radius: 10px;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+    color: #1c1c1e;
+  }
+  .symptom-tag.ai { border-color: #7ee787; background: #f0fff4; }
+  .symptom-tag.ai::before { content: "✨ "; }
+  .symptom-tag.selected { background: #238636; color: #fff; border-color: #238636; }
+
+  /* Prediction Detail */
+  .detail-card {
+    background: linear-gradient(135deg, #0d2818 0%, #1a3a2a 100%);
+    border-radius: 20px;
+    padding: 28px 24px;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+  .detail-card .big-date {
+    font-size: 42px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .detail-card .sub-text {
+    font-size: 13px;
+    color: #a8d8b0;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .confidence-section { margin-top: 16px; }
+  .confidence-section .label {
+    font-size: 12px;
+    color: #7ee787;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .factor-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-left: 3px solid #7ee787;
+  }
+  .factor-card h4 { font-size: 14px; color: #1c1c1e; margin-bottom: 2px; }
+  .factor-card p { font-size: 12px; color: #8e8e93; }
+
+  /* Delay */
+  .delay-card {
+    background: linear-gradient(135deg, #2d2410 0%, #3d3420 100%);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+  .delay-card .delay-label {
+    font-size: 12px;
+    color: #d29922;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .delay-card .delay-days {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .delay-card .delay-desc {
+    font-size: 13px;
+    color: #e8d8a8;
+    line-height: 1.5;
+  }
+
+  .level-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .level-warn { background: rgba(210,153,34,0.2); color: #d29922; }
+
+  .reason-item {
+    display: flex;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f5;
+  }
+  .reason-item:last-child { border-bottom: none; }
+  .reason-icon { font-size: 20px; }
+  .reason-text h4 { font-size: 14px; color: #1c1c1e; }
+  .reason-text p { font-size: 12px; color: #8e8e93; }
+
+  .action-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 10px;
+    border: none;
+  }
+  .action-btn.primary { background: #238636; color: #fff; }
+  .action-btn.outline { background: #fff; color: #1c1c1e; border: 1.5px solid #e5e5ea; }
+
+  /* AI Companion */
+  .chat-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 0;
+  }
+  .chat-msg {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .chat-msg.ai {
+    background: #f0f0f5;
+    color: #1c1c1e;
+    border-bottom-left-radius: 4px;
+    margin-right: auto;
+  }
+  .chat-msg.user {
+    background: #238636;
+    color: #fff;
+    border-bottom-right-radius: 4px;
+    margin-left: auto;
+  }
+  .chat-input-bar {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #fff;
+    border-top: 1px solid #f0f0f5;
+  }
+  .chat-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1.5px solid #e5e5ea;
+    border-radius: 20px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .chat-send {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: #238636;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  /* Insights */
+  .insight-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 12px;
+    border: 1px solid #f0f0f5;
+  }
+  .insight-card h4 { font-size: 15px; color: #1c1c1e; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .insight-card p { font-size: 13px; color: #8e8e93; line-height: 1.5; }
+  .insight-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #238636;
+    margin: 8px 0;
+  }
+  .mini-chart {
+    height: 60px;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    margin-top: 12px;
+  }
+  .mini-bar {
+    flex: 1;
+    background: linear-gradient(180deg, #7ee787, #238636);
+    border-radius: 3px 3px 0 0;
+    min-height: 8px;
+  }
+
+  .page-label {
+    text-align: center;
+    padding: 16px;
+    font-size: 13px;
+    color: #8b949e;
+  }
+  .page-label strong { color: #7ee787; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🌙 LunaCare Figma 高保真原型</h1>
+  <p>10个核心界面 · 可点击交互 · 点击下方导航或界面内按钮切换</p>
+</div>
+
+<div class="nav-bar" id="navBar">
+  <button class="nav-btn active" onclick="showScreen(0)">01 Splash</button>
+  <button class="nav-btn" onclick="showScreen(1)">02 Onboarding</button>
+  <button class="nav-btn" onclick="showScreen(2)">03 Privacy</button>
+  <button class="nav-btn" onclick="showScreen(3)">04 Home</button>
+  <button class="nav-btn" onclick="showScreen(4)">05 Quick Log</button>
+  <button class="nav-btn" onclick="showScreen(5)">06 Prediction</button>
+  <button class="nav-btn" onclick="showScreen(6)">07 Explanation</button>
+  <button class="nav-btn" onclick="showScreen(7)">08 Delay</button>
+  <button class="nav-btn" onclick="showScreen(8)">09 AI Chat</button>
+  <button class="nav-btn" onclick="showScreen(9)">10 Insights</button>
+</div>
+
+<div class="prototype-container">
+  <div class="phone">
+
+    <!-- 01 Splash -->
+    <div class="screen splash active" id="screen-0">
+      <div class="splash-logo">🌙</div>
+      <div class="splash-title">LunaCare</div>
+      <div class="splash-tagline">Predict → Explain → Guide</div>
+      <div style="position:absolute;bottom:80px;left:0;right:0;text-align:center;">
+        <button class="btn-primary" style="width:80%;margin:0 auto;display:block;" onclick="showScreen(1)">开始使用</button>
+      </div>
+      <div class="home-indicator light"><div></div></div>
+    </div>
+
+    <!-- 02 Onboarding -->
+    <div class="screen" id="screen-1">
+      <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="screen-content">
+        <div class="step-indicator">
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div class="onboarding-title">了解你的周期</div>
+        <div class="onboarding-sub">只需3步，我们就能为你生成初始预测</div>
+
+        <div class="input-group">
+          <div class="input-label">你的年龄</div>
+          <input class="input-field" type="text" placeholder="例如：26" value="26">
+        </div>
+        <div class="input-group">
+          <div class="input-label">最近一次经期开始日期</div>
+          <input class="input-field" type="text" placeholder="选择日期" value="2024年9月1日">
+        </div>
+        <div class="input-group">
+          <div class="input-label">平均周期长度（天）</div>
+          <input class="input-field" type="text" placeholder="例如：28" value="29">
+        </div>
+
+        <button class="btn-primary" onclick="showScreen(2)">下一步</button>
+      </div>
+      <div class="home-indicator"><div></div></div>
+    </div>
+
+    <!-- 03 Privacy -->
+    <div class="screen" id="screen-2">
+      <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="screen-content">
+        <div class="onboarding-title">你的数据，你做主</div>
+        <div class="onboarding-sub">选择适合你的隐私模式，随时可以更改</div>
+
+        <div class="privacy-card selected" onclick="this.classList.toggle('selected')">
+          <h4>🔒 标准模式</h4>
+          <p>数据加密存储在云端，用于AI预测和个性化建议。可随时导出和删除。</p>
+        </div>
+        <div class="privacy-card" onclick="this.classList.toggle('selected')">
+          <h4>📱 端侧模式</h4>
+          <p>数据仅存储在你的设备上，AI预测在本地运行。换设备时数据不会同步。</p>
+        </div>
+        <div class="privacy-card" onclick="this.classList.toggle('selected')">
+          <h4>👤 匿名模式</h4>
+          <p>不关联任何个人身份信息，使用随机ID。无法找回数据，删除即永久消失。</p>
+        </div>
+
+        <div style="margin-top:20px;font-size:11px;color:#8e8e93;line-height:1.5;">
+          我们承诺：绝不向第三方出售你的健康数据。所有数据处理符合GDPR和个人信息保护法。
+        </div>
+
+        <button class="btn-primary" style="margin-top:20px;" onclick="showScreen(3)">完成设置</button>
+      </div>
+      <div class="home-indicator"><div></div></div>
+    </div>
+
+    <!-- 04 Home -->
+    <div class="screen" id="screen-3">
+      <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="screen-content">
+        <div class="home-header">
+          <div class="home-greeting">
+            <h2>下午好，Luna 👋</h2>
+            <p>当前周期第18天</p>
+          </div>
+          <div class="avatar">L</div>
+        </div>
+
+        <div class="prediction-card" onclick="showScreen(5)">
+          <div class="label">🔮 AI 预测 · 下次经期</div>
+          <div class="date">9月30日</div>
+          <div class="range">预计在 9月28日 - 10月2日 之间</div>
+          <div class="confidence-bar"><div class="confidence-fill" style="width:72%"></div></div>
+          <div class="confidence-text">
+            <span>预测置信度 72%</span>
+            <span>有一定不确定性 →</span>
+          </div>
+        </div>
+
+        <button class="quick-log-btn" onclick="showScreen(4)">
+          <span>📝</span> 一键记录
+        </button>
+
+        <div class="info-card" onclick="showScreen(7)">
+          <h4>⚠️ 周期波动提醒</h4>
+          <p>近3个月你的周期波动较大（标准差5.2天），点击了解可能原因</p>
+        </div>
+
+        <div class="info-card">
+          <h4>💡 今日健康建议</h4>
+          <p>经前期注意补充镁和维生素B6，有助于缓解情绪波动</p>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-item active"><span class="tab-icon">🏠</span>首页</div>
+        <div class="tab-item" onclick="showScreen(9)"><span class="tab-icon">📊</span>洞察</div>
+        <div class="tab-item" onclick="showScreen(8)"><span class="tab-icon">🤖</span>AI助手</div>
+        <div class="tab-item"><span class="tab-icon">👤</span>我的</div>
+      </div>
+    </div>
+
+    <!-- 05 Quick Log -->
+    <div class="screen" id="screen-4">
+      <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="screen-content">
+        <div class="log-header">
+          <button class="back-btn" onclick="showScreen(3)">←</button>
+          <h2>记录今天</h2>
+        </div>
+
+        <div class="log-option selected">
+          <div class="icon">🩸</div>
+          <div class="text">
+            <h4>经期开始</h4>
+            <p>记录今天为经期第一天</p>
+          </div>
+        </div>
+        <div class="log-option">
+          <div class="icon">✅</div>
+          <div class="text">
+            <h4>经期结束</h4>
+            <p>记录今天为经期最后一天</p>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;">
+          <div class="input-label" style="margin-bottom:10px;">✨ AI 为你推荐的症状（基于历史记录）</div>
+          <div class="symptom-grid">
+            <div class="symptom-tag ai selected">头痛</div>
+            <div class="symptom-tag ai">情绪波动</div>
+            <div class="symptom-tag ai">乳房胀痛</div>
+            <div class="symptom-tag">疲劳</div>
+            <div class="symptom-tag">腹胀</div>
+            <div class="symptom-tag">痘痘</div>
+            <div class="symptom-tag">腰酸</div>
+            <div class="symptom-tag">失眠</div>
+            <div class="symptom-tag">+ 更多</div>
+          </div>
+        </div>
+
+        <button class="btn-primary" style="margin-top:24px;" onclick="showScreen(3)">保存记录</button>
+        <div style="text-align:center;font-size:11px;color:#8e8e93;margin-top:8px;">
+          保存后AI预测将自动更新
+        </div>
+      </div>
+      <div class="home-indicator"><div></div></div>
+    </div>
+
+    <!-- 06 Prediction Detail -->
+    <div class="screen" id="screen-5">
+      <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="screen-content">
+        <div class="log-header">
+          <button class="back-btn" onclick="showScreen(3)">←</button>
+          <h2>预测详情</h2>
+        </div>
+
+        <div class="detail-card">
+          <div class="label" style="text-align:center;color:#7ee787;font-size:12px;margin-bottom:8px;">下次经期预测</div>
+          <div class="big-date">9月30日</div>
+          <div class="sub-text">预计在 9月28日 - 10月2日 之间（±2天）</div>
+
+          <div class="confidence-section">
+            <div class="label">
+              <span>预测置信度</span>
+              <span style="color:#fff;">72%</span>
+            </div>
+            <div class="confidence-bar"><div class="confidence-fill" style="width:72%"></div></div>
+            <div style="font-size:11px;color:#a8d8b0;margin-top:6px;">
+              中等置信度 · 你的周期不太规律，建议多记录数据提高准确度
+            </div>
+          </div>
+        </div>
+
+        <div class="input-label" style="margin:16px 0 10px;">📊 本次预测使用的数据</div>
+        <div class="factor-card">
+          <h4>✅ 周期历史（8个周期）</h4>
+          <p>平均29天，标准差5.2天</p>
+        </div>
+        <div class="factor-card">
+          <h4>✅ 睡眠数据（已接入）</h4>
+          <p>近30天平均6.5小时，呈下降趋势</p>
+        </div>
+        <div class="factor-card" style="border-left-color:#d29922;">
+          <h4>⚠️ 运动数据（已接入，数据较少）</h4>
+          <p>近30天仅5天有记录</p>
+        </div>
+        <div class="factor-card" style="border-left-color:#8e8e93;">
+          <h4>⬜ 压力指数（未启用）</h4>
+          <p>开启后可提高预测准确度约15%</p>
+        </div>
+
+        <button class="btn-secondary" onclick="showScreen(6)">💡 为什么这么预测？查看详细解释</button>
+      </div>
+      <div class="home-indicator"><div></div></div>
+    </div>
+
+    <!-- 07 Prediction Explanation -->
+    <div class="screen" id="screen-6">
+      <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="screen-content">
+        <div class="log-header">
+          <button class="back-btn" onclick="showScreen(5)">←</button>
+          <h2>预测解释</h2>
+        </div>
+
+        <div style="background:#f0fff4;border-radius:14px;padding:16px;margin-bottom:16px;border:1px solid #7ee787;">
+          <div style="font-size:13px;color:#1c1c1e;line-height:1.6;">
+            <strong>AI说：</strong>根据你8个周期的历史数据，你的平均周期是29天。上次经期开始于9月1日，因此预测下次经期在9月30日左右。
+            <br><br>
+            但你的周期波动较大（标准差5.2天），且本月睡眠质量下降，所以这次预测有一定不确定性，置信区间为±2天。
+          </div>
+        </div>
+
+        <div class="input-label" style="margin-bottom:10px;">🔑 影响本次预测的关键因素</div>
+        <div class="factor-card">
+          <h4>1. 周期规律性（权重35%）</h4>
+          <p>你的周期标准差5.2天，高于平均水平，这是置信度未达80%的主要原因</p>
+        </div>
+        <div class="factor-card">
+          <h4>2. 睡眠变化（权重20%）</h4>
+          <p>近2周睡眠从7小时降至6.2小时，可能导致周期推迟1-2天</p>
+        </div>
+        <div class="factor-card">
+          <h4>3. 症状匹配（权重15%）</h4>
+          <p>近3天出现头痛和乳房胀痛，与你历史经前症状模式一致</p>
+        </div>
+
+        <div class="input-label" style="margin:20px 0 10px;">📈 如何提高预测准确度</div>
+        <div class="info-card">
+          <h4>✅ 记录更多症状</h4>
+          <p>每天记录1-2个症状，30天后置信度可提升约10%</p>
+        </div>
+        <div class="info-card">
+          <h4>✅ 开启压力指数</h4>
+          <p>压力是影响周期的重要因素，开启后可提升约15%准确度</p>
+        </div>
+      </div>
+      <div class="home-indicator"><div></div></div>
+    </div>
+
+    <!-- 08 Delay / Uncertainty -->
+    <div class="screen" id="screen-7">
+      <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="screen-content">
+        <div class="log-header">
+          <button class="back-btn" onclick="showScreen(3)">←</button>
+          <h2>周期说明</h2>
+        </div>
+
+        <div class="delay-card">
+          <div class="delay-label">⏰ 比预测晚了</div>
+          <div class="delay-days">5天</div>
+          <div class="delay-desc">预测日为9月30日，今天是10月5日，经期尚未开始</div>
+          <div style="margin-top:12px;">
+            <span class="level-badge level-warn">🟡 需关注</span>
+          </div>
+        </div>
+
+        <div class="input-label" style="margin:16px 0 10px;">🔍 可能的原因（基于你的数据）</div>
+        <div class="reason-item">
+          <div class="reason-icon">😴</div>
+          <div class="reason-text">
+            <h4>近期睡眠质量下降</h4>
+            <p>近2周平均睡眠从7h降至6.2h，睡眠不足可能导致周期推迟</p>
+          </div>
+        </div>
+        <div class="reason-item">
+          <div class="reason-icon">📉</div>
+          <div class="reason-text">
+            <h4>运动量骤减</h4>
+            <p>近2周步数从日均8000降至4000，运动变化可能影响内分泌</p>
+          </div>
+        </div>
+        <div class="reason-item">
+          <div class="reason-icon">😰</div>
+          <div class="reason-text">
+            <h4>工作压力较大</h4>
+            <p>你记录了3次"压力大"，压力是导致周期紊乱的常见原因</p>
+          </div>
+        </div>
+
+        <div class="input-label" style="margin:16px 0 10px;">💡 建议</div>
+        <button class="action-btn outline">📝 记录今天的症状和感受</button>
+        <button class="action-btn outline">👀 继续观察，设置3天后提醒</button>
+        <button class="action-btn primary">🏥 如果持续推迟超过7天，建议咨询医生</button>
+
+        <div style="font-size:10px;color:#8e8e93;text-align:center;margin-top:12px;line-height:1.4;">
+          LunaCare不能替代医生诊断。以上分析仅供参考，如有不适请及时就医。
+        </div>
+      </div>
+      <div class="home-indicator"><div></div></div>
+    </div>
+
+    <!-- 09 AI Companion -->
+    <div class="screen" id="screen-8">
+      <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="log-header" style="padding:8px 0 12px;border-bottom:1px solid #f0f0f5;">
+        <button class="back-btn" onclick="showScreen(3)">←</button>
+        <div style="flex:1;">
+          <h2 style="font-size:17px;">Luna AI 助手</h2>
+          <p style="font-size:11px;color:#238636;">● 在线 · 基于你的个人数据</p>
+        </div>
+        <div class="avatar" style="width:36px;height:36px;font-size:14px;">🌙</div>
+      </div>
+      <div class="chat-container">
+        <div class="chat-msg ai">
+          你好Luna！我看到你的周期比预测晚了5天，有什么我可以帮你的吗？
+        </div>
+        <div class="chat-msg user">
+          我最近压力很大，这会影响周期吗？
+        </div>
+        <div class="chat-msg ai">
+          会的。压力会导致皮质醇升高，进而影响下丘脑-垂体-卵巢轴，可能导致周期推迟或不规律。
+          <br><br>
+          根据你的记录，近2周你有3天标注了"压力大"，同时睡眠从7h降至6.2h，这些都可能是这次推迟5天的原因。
+        </div>
+        <div class="chat-msg user">
+          那我需要担心吗？什么时候应该去看医生？
+        </div>
+        <div class="chat-msg ai">
+          目前推迟5天，在"需关注"范围内，建议先观察。以下情况建议就医：
+          <br><br>
+          • 推迟超过7天且无明显诱因<br>
+          • 伴随剧烈腹痛或异常出血<br>
+          • 连续3个周期都推迟7天以上<br>
+          • 有备孕计划且周期紊乱
+          <br><br>
+          你目前的情况更可能是压力和睡眠导致的暂时紊乱，建议先调整作息，观察2-3天。
+        </div>
+        <div style="display:flex;gap:6px;margin:12px 0;flex-wrap:wrap;">
+          <div style="padding:8px 12px;background:#f0fff4;border:1px solid #7ee787;border-radius:14px;font-size:12px;color:#238636;cursor:pointer;">如何缓解压力？</div>
+          <div style="padding:8px 12px;background:#f0fff4;border:1px solid #7ee787;border-radius:14px;font-size:12px;color:#238636;cursor:pointer;">推荐附近的妇科医生</div>
+        </div>
+      </div>
+      <div class="chat-input-bar">
+        <input class="chat-input" placeholder="问我任何关于周期的问题...">
+        <button class="chat-send">↑</button>
+      </div>
+    </div>
+
+    <!-- 10 Insights -->
+    <div class="screen" id="screen-9">
+      <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="screen-content">
+        <div class="home-header">
+          <div class="home-greeting">
+            <h2>健康洞察</h2>
+            <p>基于你8个周期的数据</p>
+          </div>
+        </div>
+
+        <div class="insight-card">
+          <h4>📊 周期趋势</h4>
+          <div class="insight-value">29天 <span style="font-size:14px;color:#8e8e93;font-weight:400;">平均</span></div>
+          <div class="mini-chart">
+            <div class="mini-bar" style="height:60%"></div>
+            <div class="mini-bar" style="height:80%"></div>
+            <div class="mini-bar" style="height:50%"></div>
+            <div class="mini-bar" style="height:90%"></div>
+            <div class="mini-bar" style="height:70%"></div>
+            <div class="mini-bar" style="height:85%"></div>
+            <div class="mini-bar" style="height:55%"></div>
+            <div class="mini-bar" style="height:75%"></div>
+          </div>
+          <p style="margin-top:8px;">近3个月波动增大，标准差从3.1天升至5.2天</p>
+        </div>
+
+        <div class="insight-card">
+          <h4>🔍 症状-周期关联</h4>
+          <p>你最常出现的经前症状：</p>
+          <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
+            <span style="padding:6px 12px;background:#f0fff4;border-radius:12px;font-size:12px;color:#238636;">头痛 (75%)</span>
+            <span style="padding:6px 12px;background:#f0fff4;border-radius:12px;font-size:12px;color:#238636;">情绪波动 (63%)</span>
+            <span style="padding:6px 12px;background:#f0fff4;border-radius:12px;font-size:12px;color:#238636;">乳房胀痛 (50%)</span>
+          </div>
+          <p style="margin-top:10px;">💡 头痛通常在经期前2-3天出现，可提前准备止痛药</p>
+        </div>
+
+        <div class="insight-card">
+          <h4>😴 睡眠与周期</h4>
+          <p>你的睡眠质量与周期长度呈正相关：</p>
+          <div class="insight-value" style="font-size:20px;">睡眠每减少1小时，周期平均推迟1.2天</div>
+          <p>近2周睡眠下降可能是本次推迟的主要原因</p>
+        </div>
+
+        <div class="insight-card" style="border-left:3px solid #d29922;">
+          <h4>⚠️ 需要关注</h4>
+          <p>连续2个月周期波动超过5天，建议：</p>
+          <p style="margin-top:8px;color:#1c1c1e;">1. 记录每日压力水平<br>2. 保持规律作息<br>3. 如持续紊乱建议咨询医生</p>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-item" onclick="showScreen(3)"><span class="tab-icon">🏠</span>首页</div>
+        <div class="tab-item active"><span class="tab-icon">📊</span>洞察</div>
+        <div class="tab-item" onclick="showScreen(8)"><span class="tab-icon">🤖</span>AI助手</div>
+        <div class="tab-item"><span class="tab-icon">👤</span>我的</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="page-label">
+  当前界面：<strong id="currentLabel">01 Splash</strong> · 点击导航切换 · 界面内按钮也可跳转
+</div>
+
+<script>
+  const screens = document.querySelectorAll('.screen');
+  const navBtns = document.querySelectorAll('.nav-btn');
+  const labels = ['01 Splash','02 Onboarding','03 Privacy','04 Home','05 Quick Log','06 Prediction Detail','07 Prediction Explanation','08 Delay / Uncertainty','09 AI Companion','10 Insights'];
+
+  function showScreen(index) {
+    screens.forEach((s, i) => s.classList.toggle('active', i === index));
+    navBtns.forEach((b, i) => b.classList.toggle('active', i === index));
+    document.getElementById('currentLabel').textContent = labels[index];
+    document.querySelector('.phone').scrollTop = 0;
+  }
+</script>
+
+</body>
+</html>
